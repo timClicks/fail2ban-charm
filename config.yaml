@@ -1,0 +1,234 @@
+options:
+  maxretry:
+    type: int
+    default: 3
+    description: "number of attempts before banning the IP address"
+  ignoreip:
+    type: string
+    default: ""
+    description: "Additional IP's to add to the ignore ruleset"
+  banaction:
+    type: string
+    default: iptables-multiport
+    description: |
+      Default action when ban is triggered. Valid values include
+      "iptables", "iptables-new", "iptables-multiport", "shorewall". 
+      See fail2ban documentation for details. 
+  bantime:
+    type: int
+    default: 3600
+    description: "Ban time in seconds (defaults to 1 hour)"
+  destemail:
+    type: string
+    default: root@localhost
+    description: "Address to send mail to on abuse"
+  mta:
+    type: string
+    default: sendmail
+    description: |
+      Mail Transfer Agent used by actions. Valid values are "mail", and "sendmail".
+  ssh_filter_enabled:
+    type: boolean
+    default: yes
+    description: Whether to enable the [ssh] filter.
+  ssh_filter_max_retries:
+    type: int
+    default: 6
+    description: |
+      Maximum number of retries accepted before the [ssh] filter will ban 
+      the IP address. Has no effect unless ssh_filter_enabled is set to true.
+  dropbear_filter_enabled:
+    type: boolean
+    default: no
+    description: Whether to enable the [dropbear] filter.
+  dropbear_filter_max_retries:
+    type: int
+    default: 6
+    description: |
+      Maximum number of retries accepted before the [dropbear] filter will ban 
+      the IP address. Has no effect unless dropbear_filter_enabled is set to true.
+  dropbear_logpath:
+    type: string
+    default: /var/log/dropbear
+    description: Location where dropbear stores its logs.
+  pam_generic_filter_enabled:
+    type: boolean
+    default: no
+    description: |
+      Whether to enable the [pam-generic] filter.
+  pam_generic_filter_max_retries:
+    type: int
+    default: 6
+    description: |
+      Maximum number of retries accepted before the [pam-generic] filter 
+      will ban the IP address. Has no effect unless 
+      pam_generic_filter_enabled is set to true.
+  xinetd_fail_filter_enabled:
+    type: boolean
+    default: no
+    description: |
+      Whether to enable the [xinetd-fail] filter.
+  xinetd_fail_filter_max_retries:
+    type: int
+    default: 2
+    description: |
+      Maximum number of retries accepted before the [xinetd-fail] filter 
+      will ban the IP address. Has no effect unless 
+      xinetd_fail_filter_enabled is set to true.
+  ssh_ddos_filter_enabled:
+    type: boolean
+    default: no
+    description: |
+      Whether to enable the [ssh-ddos] filter. 
+  ssh_ddos_filter_max_retries:
+    type: int
+    default: 6
+    description: |
+      Maximum number of retries accepted before the [ssh-ddos] filter 
+      will ban the IP address. Has no effect unless 
+      ssh_ddos_filter_enabled is set to true.
+  apache_filter_enabled:
+    type: boolean
+    default: no
+    description: |
+      Whether to enable the [apache] filter. 
+  apache_filter_max_retries:
+    type: int
+    default: 6
+    description: |
+      Maximum number of retries accepted before the [apache] filter 
+      will ban the IP address. Has no effect unless 
+      ssh_ddos_filter_enabled is set to true.
+  apache_noscript_filter_enabled:
+    type: boolean
+    default: no
+    description: |
+      Whether to enable the [apache-noscript] filter. 
+  apache_noscript_filter_max_retries:
+    type: int
+    default: 6
+    description: |
+      Maximum number of retries accepted before the [apache-noscript] filter 
+      will ban the IP address. Has no effect unless 
+      apache_noscript_filter_enabled is set to true.
+  apache_overflows_filter_enabled:
+    type: boolean
+    default: no
+    description: |
+      Whether to enable the [apache-overflows] filter. 
+  apache_overflows_filter_max_retries:
+    type: int
+    default: 6
+    description: |
+      Maximum number of retries accepted before the [apache-overflows] filter 
+      will ban the IP address. Has no effect unless 
+      apache_overflows_filter_enabled is set to true.
+  apache_logpath:
+    type: string
+    default: /var/log/apache*/*error.log
+    description: Where Apache httpd stores its error logs.
+  vsftpd_filter_enabled:
+    type: boolean
+    default: no
+    description: |
+      Whether to enable the [vsftpd] filter. 
+  vsftpd_filter_max_retries:
+    type: int
+    default: 6
+    description: |
+      Maximum number of retries accepted before the [vsftpd] filter 
+      will ban the IP address. Has no effect unless 
+      vsftpd_filter_enabled is set to true.
+  vsftpd_logpath:
+    type: string
+    default: /var/log/vsftpd.log
+    description: |
+      Location where vsftpd records its logs.
+  proftpd_filter_enabled:
+    type: boolean
+    default: no
+    description: |
+      Whether to enable the [proftpd] filter. 
+  proftpd_filter_max_retries:
+    type: int
+    default: 6
+    description: |
+      Maximum number of retries accepted before the [proftpd] filter 
+      will ban the IP address. Has no effect unless 
+      proftpd_filter_enabled is set to true.
+  pure_ftpd_filter_enabled:
+    type: boolean
+    default: no
+    description: |
+      Whether to enable the [pure-ftpd] filter. 
+  pure_ftpd_filter_max_retries:
+    type: int
+    default: 6
+    description: |
+      Maximum number of retries accepted before the [pure-ftpd] filter 
+      will ban the IP address. Has no effect unless 
+      pure_ftpd_filter_enabled is set to true.
+  wuftpd_filter_enabled:
+    type: boolean
+    default: no
+    description: |
+      Whether to enable the [wuftpd] filter. 
+  wuftpd_filter_max_retries:
+    type: int
+    default: 6
+    description: |
+      Maximum number of retries accepted before the [wuftpd] filter 
+      will ban the IP address. Has no effect unless 
+      wuftpd_filter_enabled is set to true.
+  postfix_filter_enabled:
+    type: boolean
+    default: no
+    description: |
+      Whether to enable the [postfix] filter. 
+  couriersmtp_filter_enabled:
+    type: boolean
+    default: no
+    description: |
+      Whether to enable the [couriersmtp] filter. 
+  courierauth_filter_enabled:
+    type: boolean
+    default: no
+    description: |
+      Whether to enable the [courierauth] filter. 
+  sasl_filter_enabled:
+    type: boolean
+    default: no
+    description: |
+      Whether to enable the [sasl] filter. 
+  dovecot_filter_enabled:
+    type: boolean
+    default: no
+    description: |
+      Whether to enable the [sasl] filter. 
+  named_refused_tcp_filter_enabled:
+    type: boolean
+    default: no
+    description: |
+      Whether to enable the [named-refused] filter on TCP connections. 
+  named_refused_udp_filter_enabled:
+    type: boolean
+    default: no
+    description: |
+      Whether to enable the [named-refused] filter on UDP connections.
+  named_logpath:  
+    type: string
+    default: /var/log/named/security.log
+    description: |
+      Location where named (BIND9) stores its access logs. Use in 
+      conjunction with named_refused_tcp_filter_enabled and 
+      named_refused_tcp_filter_enabled.
+  mail_logpath:
+    type: string
+    default: /var/log/mail.log
+    description: |
+      Location where filters that inspect mail server logs should look. 
+  generic_auth_logpath:
+    type: string
+    default: /var/log/auth.log
+    description: |
+      Location where filters that inspect auth.log files should look.

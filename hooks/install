@@ -1,0 +1,8 @@
+#!/bin/bash
+
+set -ex
+
+apt-get update
+apt-get install -y python-yaml fail2ban
+
+cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local

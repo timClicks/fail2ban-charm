@@ -1,0 +1,45 @@
+#!/usr/bin/python
+
+import os
+import sys
+import subprocess
+import time
+
+sys.path.insert(0, os.path.join(os.environ['CHARM_DIR'], 'lib'))
+
+from charmhelpers.core import (
+    hookenv,
+    host,
+)
+
+from charmhelpers.contrib.templating.jinja import render
+
+hooks = hookenv.Hooks()
+log = hookenv.log
+
+SERVICE = 'fail2ban'
+
+
+@hooks.hook('config-changed')
+def config_changed():
+    config = hookenv.config()
+
+    for key in config:
+        if config.changed(key):
+            log("config['{}'] changed from {} to {}".format(
+                key, config.previous(key), config[key]))
+
+    config.save()
+
+    with open('/etc/fail2ban/jail.local', 'w') as p:
+        p.write(render('jail.local', config))
+
+    host.service_restart('fail2ban')
+    time.sleep(5)
+    subprocess.call("hooks/update-status")
+
+
+
+if __name__ == "__main__":
+    # execute a hook based on the name the program is called by
+    hooks.execute(sys.argv)

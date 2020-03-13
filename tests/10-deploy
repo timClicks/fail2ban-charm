@@ -1,0 +1,76 @@
+#!/usr/bin/env python3
+
+# The amulet code to test the fail2ban charm.
+
+import amulet
+import unittest
+
+
+# The number of seconds to wait for Juju to set up the environment.
+seconds = 900
+
+# Configure fail2ban
+configuration = {
+    'maxretry': '6',
+    'bantime': '3660',
+    'destemail': 'amulet@juju.com'
+}
+
+
+class TestDeployment(unittest.TestCase):
+    ''' A subclass of TestCase to perform a deployment and run the tests. '''
+    @classmethod
+    def setUpClass(self):
+        ''' The setup class gets run one time before tests. '''
+        self.deployment = amulet.Deployment(series='trusty')
+        self.deployment.add('ubuntu')
+        self.deployment.add('fail2ban')
+        self.deployment.configure('fail2ban', configuration)
+        # Relate the two charms.
+        self.deployment.relate('ubuntu:juju-info', 'fail2ban:juju-info')
+
+        try:
+            self.deployment.setup(timeout=seconds)
+            self.deployment.sentry.wait()
+        except amulet.helpers.TimeoutError:
+            message = 'The environment did not set up in %d seconds!' % seconds
+            amulet.raise_status(amulet.SKIP, msg=message)
+        except:
+            raise
+        # Get a reference to the Ubuntu unit.
+        self.unit = self.deployment.sentry.unit['ubuntu/0']
+
+    def test_status(self):
+        ''' Test the status of the fail2ban process. '''
+        # Verify the fail2ban service is installed and runing on ubuntu.
+        command = 'sudo service fail2ban status'
+        print(command)
+        # Run the command to see if fail2ban is running.
+        output, code = self.unit.run(command)
+        print(output)
+        if code != 0:
+            message = 'The fail2ban process is not running!'
+            amulet.raise_status(amulet.FAIL, msg=message)
+
+    def test_config(self):
+        ''' Test the configuration was set on the local configuration file. '''
+        config_string = self.unit.file_contents('/etc/fail2ban/jail.local')
+        print(config_string)
+        if configuration['destemail'] not in config_string:
+            message = 'The destemail value was not in the configuration file!'
+            amulet.raise_status(amulet.FAIL, msg=message)
+
+    def test_iptables(self):
+        ''' Test to set if 'fail2ban' is in the iptables firewall rules. '''
+        command = 'sudo iptables -S'
+        print(command)
+        # Run the command to see if fail2ban is in the iptables rules.
+        output, code = self.unit.run(command)
+        print(output)
+        if 'fail2ban' not in output:
+            message = 'There were no firewall rules including fail2ban!'
+            amulet.raise_status(amulet.FAIL, msg=message)
+
+
+if __name__ == '__main__':
+    unittest.main()

@@ -1,0 +1,23 @@
+#! /bin/bash
+
+set -e
+set -x
+
+
+active=$(systemctl is-active fail2ban)
+
+if [ "$active" = "active" ]
+then
+    jails=$(fail2ban-client status | grep "Jail list:" | cut -d ":" -f2 | sed -e "s/^[[:space:]]*//")
+    status=$active
+    message="jails: ${jails}"
+elif [ "$active" = "failed" ]
+then
+    system_status=$(systemctl status fail2ban)
+    status="blocked"
+    message="misconfigured:\n${system_status}"
+else
+    exit 1
+fi
+
+status-set "$status" "$message"

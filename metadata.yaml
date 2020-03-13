@@ -1,0 +1,27 @@
+name: fail2ban
+summary: Bans IP addresses that have too many authentication failures.
+maintainer: Tim McNamara <tsm@canonical.com>
+description: |
+  Fail2ban monitors log files (e.g. /var/log/auth.log,
+  /var/log/apache/access.log) and temporarily or persistently bans
+  failure-prone addresses by updating existing firewall rules.  Fail2ban
+  allows easy specification of different actions to be taken such as to
+  ban an IP using iptables or hostsdeny rules, or simply to send a
+  notification email.  By default, it comes with filter expressions for
+  various services (sshd, apache, qmail, proftpd, sasl etc.) but
+  configuration can be easily extended for monitoring any other text
+  file.  All filters and actions are given in the config files, thus
+  fail2ban can be adopted to be used with a variety of files and
+  firewalls.
+tags:
+  - security
+subordinate: true
+requires:
+  juju-info:
+    interface: juju-info
+    scope: container
+series:
+  - precise
+  - trusty
+  - xenial
+  - bionic
